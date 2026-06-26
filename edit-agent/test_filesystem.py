@@ -24,3 +24,22 @@ try:
     read_file("../../etc/passwd")
 except PermissionError as e:
     print(f"Blocked correctly: {e}")
+
+
+
+from tools.diff import generate_diff, has_changes
+
+original = """def greet(name):
+    print("hello " + name)
+"""
+
+proposed = """def greet(name):
+    print(f"Hello, {name}!")
+"""
+
+print("=== generate_diff ===")
+print(generate_diff(original, proposed, "greet.py"))
+
+print("=== has_changes ===")
+print(has_changes(original, proposed))  # should print True
+print(has_changes(original, original))  # should print False
