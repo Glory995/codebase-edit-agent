@@ -64,3 +64,31 @@ CHANGE: <what you will do and where>
 
 Do not write any code yet. Plan only.
 """
+
+def prompt_create_plan(instruction: str, file_listing: str) -> str:
+    """
+    Return a prompt asking the agent to produce a step-by-step plan
+    before taking any action.
+
+    Args:
+        instruction:  The user's original instruction.
+        file_listing: The current contents of the workspace directory.
+
+    Returns:
+        A prompt string that asks for a numbered plan only — no tool calls yet.
+    """
+    return f"""Before taking any action, produce a clear step-by-step plan.
+
+User instruction: {instruction}
+
+Current workspace contents:
+{file_listing}
+
+Write a numbered plan of exactly what you will do, in order.
+Each step must be one clear action — read a file, make a specific edit, verify a change.
+
+Format each step as:
+STEP N: <clear description of what you will do>
+
+Do not use any tools yet. Plan only. Be specific about which files you will touch.
+"""

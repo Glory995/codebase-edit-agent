@@ -38,7 +38,7 @@ def complete(system_prompt: str, user_prompt: str, model: str = DEFAULT_MODEL) -
         ],
     }
 
-    response = requests.post(url, json=payload, timeout=60)
+    response = requests.post(url, json=payload, timeout=120)
     response.raise_for_status()
 
     return response.json()["message"]["content"]

@@ -13,6 +13,7 @@ from dotenv import load_dotenv
 
 from tools.parser import extract_tool_request
 from tools.filesystem import read_file, list_dir, write_file
+from agent.planner import plan_and_format
 from tools.sandbox import ensure_sandbox_exists
 from prompts import AGENT_SYSTEM_PROMPT
 from agent.exceptions import (
@@ -192,6 +193,18 @@ def main():
             break
 
         history.append({"role": "user", "content": user_input})
+
+        # For complex tasks, create a plan first and inject it
+        # into the conversation so the agent follows it
+        try:
+            plan = plan_and_format(user_input)
+            if plan:
+                print()
+                print("  [planner] Plan created — starting execution...")
+                print()
+                history.append({"role": "assistant", "content": plan})
+        except Exception as e:
+            print(f"  [planner] Planning skipped: {e}")
 
         try:
             result = run_agent_turn(history)
